@@ -36,6 +36,8 @@ class ChiefController extends Controller
         if(!password_verify($validated['password'], $hashedPassword)){
             return redirect()->back()->with('fail', 'Incorrect Password');
         }
+        $request->session()->put('loggedUser', $validated['username']);
+        return redirect('/dashboard')->with('successfull', 'Login Successfully');
     }
 
     /**
@@ -49,7 +51,14 @@ class ChiefController extends Controller
             'cpassowrd'=>'required|string'
         ]);
 
-        $user=Chief::create($validated);
+        $user=Chief::creat([
+            'username'=>$validated['username'],
+            'password'=>password_hash($validated['password'], PASSWORD_DEFAULT)
+        ])->save();
+        if(!$user){
+            return redirect()->back()->with('fail', 'An error occured please try again!');
+        }
+        $user=Chief::where('username',$validated['username'])->exists();
         if(!$user){
             return redirect()->back()->with('fail', 'An error occured please try again!');
         }
