@@ -32,7 +32,10 @@ class ChiefController extends Controller
         if(!$user){
             return redirect()->back()->with('fail', 'User Not Found');
         }
-        
+        $hashedPassword=Chief::where('username',$validated['username'])->value('password');
+        if(!password_verify($validated['password'], $hashedPassword)){
+            return redirect()->back()->with('fail', 'Incorrect Password');
+        }
     }
 
     /**
