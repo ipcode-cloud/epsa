@@ -10,7 +10,6 @@
 
 <body>
     <x-nav/>
-    <h1>Welcome</h1>
     <div class="w-full h-screen flex flex-col items-center justify-center bg-gray-100">
         @yield('content')
     </div>
@@ -25,7 +24,7 @@
             <li><a href="https://www.linkedin.com/company/yourcompany">LinkedIn</a></li>
         </ul>
     </footer>
-    <script src="automate.js"></script>
+    @yield('scripts')
 </body>
 
 </html>

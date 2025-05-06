@@ -26,18 +26,23 @@ class ChiefController extends Controller
         $validated=$request->validate([
             'username'=>'required|string|min:4',
             'password'=>'required|string'
+        ],[
+            'username.required'=>'Username is required',
+            'username.min'=>'Username must be at least 4 characters',
+            'password.required'=>'Password is required',
+            'password.min'=>'Password must be at least 5 characters',
         ]);
 
-        $user=Chief::where('username',$validated['username'])->exists();
+        $user=Chief::where('user_name',$validated['username'])->exists();
         if(!$user){
             return redirect()->back()->with('fail', 'User Not Found');
         }
-        $hashedPassword=Chief::where('username',$validated['username'])->value('password');
+        $hashedPassword=Chief::where('user_name',$validated['username'])->value('password');
         if(!password_verify($validated['password'], $hashedPassword)){
             return redirect()->back()->with('fail', 'Incorrect Password');
         }
         $request->session()->put('loggedUser', $validated['username']);
-        return redirect('/dashboard')->with('successfull', 'Login Successfully');
+        return redirect('/dashboard')->with('success', 'Login Successfully');
     }
 
     /**
@@ -46,23 +51,31 @@ class ChiefController extends Controller
     public function store(Request $request)
     {
         $validated=$request->validate([
-            'username'=>'required|string|unique:username,chiefs|min:4',
-            'password'=>'required|string|confirmed',
-            'cpassowrd'=>'required|string'
+            'username'=>'required|string|unique:chiefs,user_name|min:4',
+            'password'=>'required|string|min:5',
+            'cpassword'=>'required|min:5|string'
+        ],[
+            'username.required'=>'Username is required',
+            'username.unique'=>'Username already exists',
+            'username.min'=>'Username must be at least 4 characters',
+            'password.required'=>'Password is required',
+            'password.min'=>'Password must be at least 5 characters',
+            'cpassword.required'=>'Confirm Password is required',
+            'cpassword.min'=>'Confirm Password must be at least 5 characters',
         ]);
 
-        $user=Chief::creat([
-            'username'=>$validated['username'],
+        $user=Chief::create([
+            'user_name'=>$validated['username'],
             'password'=>password_hash($validated['password'], PASSWORD_DEFAULT)
         ])->save();
         if(!$user){
             return redirect()->back()->with('fail', 'An error occured please try again!');
         }
-        $user=Chief::where('username',$validated['username'])->exists();
+        $user=Chief::where('user_name',$validated['username'])->exists();
         if(!$user){
             return redirect()->back()->with('fail', 'An error occured please try again!');
         }
-        return redirect('/login')->with('successfull', 'registered Successfully');
+        return redirect('/login')->with('success', 'registered Successfully');
     }
 
     /**
