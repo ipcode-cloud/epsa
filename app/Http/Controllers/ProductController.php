@@ -10,9 +10,10 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() 
     {
-        //
+        $products=Product::paginate(10);
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -20,7 +21,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -28,7 +29,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate(
+            [
+                'product_name' => 'required|string|max:255',
+            ],
+            [
+                'product_name.required' => 'Product Name is required'
+            ]
+        );
+        $product = Product::create($validated);
+
+        return redirect()->route('products.index')->with('success', 'product created successfully!');
     }
 
     /**

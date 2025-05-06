@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StockInController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,3 +14,6 @@ Route::get('/login', function(){
 Route::get('/register', function(){
     return view(('auth.register'));
 });
+
+Route::resource('products',ProductController::class);
+Route::resource('stockin',StockInController::class);
