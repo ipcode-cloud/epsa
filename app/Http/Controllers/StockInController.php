@@ -54,7 +54,8 @@ class StockInController extends Controller
      */
     public function show(Stock_in $stock_in)
     {
-        //
+        // Show the stock-in record details
+        return view('stockin.show', compact('stock_in'));
     }
 
     /**
@@ -62,7 +63,8 @@ class StockInController extends Controller
      */
     public function edit(Stock_in $stock_in)
     {
-        //
+        // Show the form to edit the stock-in record
+        return view('stockin.edit', compact('stock_in'));
     }
 
     /**
@@ -70,7 +72,29 @@ class StockInController extends Controller
      */
     public function update(Request $request, Stock_in $stock_in)
     {
-        //
+        $validated = $request->validate([
+            'product_id' => 'required|exists:products,product_id',
+            'quantity' => 'required|integer|min:1',
+            'unit_price' => 'required|numeric',
+            'total_price' => 'required|numeric',
+            'date' => 'required|date',
+        ], [
+            'product_id.required' => 'Product ID is required',
+            'product_id.exists' => 'Product ID does not exist',
+            'quantity.required' => 'Quantity is required',
+            'quantity.integer' => 'Quantity must be an integer',
+            'quantity.min' => 'Quantity must be at least 1',
+            'date.required' => 'Date is required',
+            'date.date' => 'Date must be a valid date',
+            'unit_price.required' => 'Unit price is required',
+            'unit_price.numeric' => 'Unit price must be a number',
+            'total_price.required' => 'Total price is required',
+            'total_price.numeric' => 'Total price must be a number',
+        ]);
+
+        $stock_in->update($validated);
+
+        return redirect()->back()->with('success', 'Stock-in record updated successfully');
     }
 
     /**
@@ -78,6 +102,8 @@ class StockInController extends Controller
      */
     public function destroy(Stock_in $stock_in)
     {
-        //
+        $stock_in->delete();
+
+        return redirect()->back()->with('success', 'Stock-in record deleted successfully');
     }
 }
