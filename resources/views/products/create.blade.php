@@ -7,8 +7,11 @@
             @csrf
 
             <div class="mb-4">
-                <label for="product_name" class="block text-gray-700 text-sm font-bold mb-2">Select Product:</label>
+                <label for="product_name" class="block text-gray-700 text-sm font-bold mb-2">ProductName:</label>
                 <input type="text" name="product_name" id="product_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Product Name" required>
+                @error('product_name')
+                    <span class="text-red-500 text-xs italic">{{ $message }}</span>
+                @enderror
             </div>
                 
             <button type="submit">Add Product</button>

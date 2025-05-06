@@ -8,7 +8,7 @@ class Stock_in extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        'product_id',
+        'product_in_id',
         'quantity',
         'date',
     ];

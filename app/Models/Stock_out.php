@@ -8,9 +8,8 @@ class Stock_out extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        'product_id',
+        'product_out_id',
         'quantity',
         'date',
-        'quantity',
     ];
 }

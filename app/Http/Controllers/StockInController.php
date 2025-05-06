@@ -13,7 +13,7 @@ class StockInController extends Controller
     public function index()
     {
         $stockIns = Stock_in::paginate(10);
-        return view('stockin.index', compact('stockIns'));
+        return view('stockins.index', compact('stockIns'));
     }
 
     /**
@@ -22,7 +22,7 @@ class StockInController extends Controller
     public function create()
     {
         // Show the form to create a new stock-in record
-        return view('stockin.create');
+        return view('stockins.create');
     }
 
     /**
@@ -31,12 +31,12 @@ class StockInController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'product_id' => 'required|exists:products,product_id',
+            'product_in_id' => 'required|exists:products,product_id',
             'quantity' => 'required|integer|min:1',
             'date' => 'required|date',
         ], [
-            'product_id.required' => 'Product ID is required',
-            'product_id.exists' => 'Product ID does not exist',
+            'product_in_id.required' => 'Product ID is required',
+            'product_in_id.exists' => 'Product ID does not exist',
             'quantity.required' => 'Quantity is required',
             'quantity.integer' => 'Quantity must be an integer',
             'quantity.min' => 'Quantity must be at least 1',
@@ -55,7 +55,7 @@ class StockInController extends Controller
     public function show(Stock_in $stock_in)
     {
         // Show the stock-in record details
-        return view('stockin.show', compact('stock_in'));
+        return view('stockins.show', compact('stock_in'));
     }
 
     /**
@@ -64,7 +64,7 @@ class StockInController extends Controller
     public function edit(Stock_in $stock_in)
     {
         // Show the form to edit the stock-in record
-        return view('stockin.edit', compact('stock_in'));
+        return view('stockins.edit', compact('stock_in'));
     }
 
     /**
