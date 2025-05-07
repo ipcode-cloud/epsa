@@ -3,7 +3,7 @@
     <div>
         <h1>Login</h1>
         <div>
-            <form action="{}" method="post">
+            <form action="{{route('login')}}" method="post">
                 @csrf
                 <label for="name">Name:</label>
                 <input type="text" name="username" id="username" value="{{ old('username') }}">
@@ -11,7 +11,7 @@
                     <span>$message</span>
                 @enderror
                 <label for="password">Password</label>
-                <input type="text" name="password" id="password" value="{{ old('password') }}">
+                <input type="password" name="password" id="password" value="{{ old('password') }}">
                 @error('password')
                     <span>$message</span>
                 @enderror

@@ -8,7 +8,7 @@ class Stock_in extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        'product_in_id',
+        'product_id',
         'quantity',
         'unit_price',
         'total_price',
@@ -17,6 +17,6 @@ class Stock_in extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_in_id', 'product_id');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }

@@ -2,6 +2,7 @@
 @section('content')
 <div>
     <h1>Products</h1>
+    <a href="{{route('products.create')}}">create</a>
     <table>
         <thead>
             <th>Product Id</th>

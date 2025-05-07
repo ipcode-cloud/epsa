@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chief;
+use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ChiefController extends Controller
 {
@@ -23,16 +25,20 @@ class ChiefController extends Controller
      */
     public function login(Request $request)
     {
-        $validated=$request->validate([
-            'username'=>'required|string|min:4',
-            'password'=>'required|string'
+        $validated = $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string'
         ]);
-
-        $user=Chief::where('username',$validated['username'])->exists();
-        if(!$user){
-            return redirect()->back()->with('fail', 'User Not Found');
+        Auth::attempt(['user_name' => $validated['username'], 'password' => $validated['password']]);
+        if (!Auth::check()) {
+            return redirect()->back()->with('fail', 'Invalid Credentials');
         }
-        
+        return redirect('/')->with('success', 'Login Successfully');
+        // $user=Chief::where('username',$validated['username'])->exists();
+        // if(!$user){
+        //     return redirect()->back()->with('fail', 'User Not Found');
+        // }
+
     }
 
     /**
@@ -40,19 +46,31 @@ class ChiefController extends Controller
      */
     public function store(Request $request)
     {
-        $validated=$request->validate([
-            'username'=>'required|string|unique:username,chiefs|min:4',
-            'password'=>'required|string|confirmed',
-            'cpassowrd'=>'required|string'
+        $validated = $request->validate([
+            'username' => 'required|string|unique:chiefs,user_name',
+            'password' => 'required|string',
+            'cpassword' => 'required|string'
+        ],
+        [
+            'username.unique' => 'Username already exists',
+        ]);
+        // dd($validated);
+        $user = Chief::create([
+            'user_name' => $validated['username'],
+            'password' => Hash::make($validated['password']),
         ]);
 
-        $user=Chief::create($validated);
-        if(!$user){
+        Auth::login($user);
+        if (!$user) {
             return redirect()->back()->with('fail', 'An error occured please try again!');
         }
-        return redirect('/login')->with('successfull', 'registered Successfully');
+        return redirect('/')->with('successfull', 'registered Successfully');
     }
-
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/login')->with('success', 'Logout Successfully');
+    }
     /**
      * Display the specified resource.
      */

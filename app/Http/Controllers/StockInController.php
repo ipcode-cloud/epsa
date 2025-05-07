@@ -13,8 +13,8 @@ class StockInController extends Controller
      */
     public function index()
     {
-        $stockins = Stock_in::with('product')->get();
-        // dd($product_ids);
+        $stockins = Stock_in::with('product')->paginate(3);
+        // dd($stockins);
         return view('stockin.index', compact('stockins'));
     }
 
@@ -43,7 +43,7 @@ class StockInController extends Controller
         ]);
         // dd($validate);
         $product=Stock_in::create([
-            'product_in_id'=>$validate['product'],
+            'product_id'=>$validate['product'],
             'date'=>$validate['date'],
             'quantity'=>$validate['quantity'],
             'unit_price'=>$validate['unit_price'],
